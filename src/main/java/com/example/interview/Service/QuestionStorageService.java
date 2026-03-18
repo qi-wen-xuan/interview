@@ -7,7 +7,7 @@ import com.example.interview.vo.resp.QuestionRespVO;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
-public interface QuestionStorageService {
+public interface QuestionStorageService{
     QuestionRespVO createQuestion(QuestionCreateReqVO question);
 
     void deleteQuestionById (Long id);
