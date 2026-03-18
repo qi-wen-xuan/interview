@@ -2,6 +2,7 @@ package com.example.interview.Service;
 
 import com.example.interview.vo.req.QuestionCreateReqVO;
 import com.example.interview.vo.req.QuestionQueryReqVO;
+import com.example.interview.vo.req.QuestionUpdateReqVO;
 import com.example.interview.vo.resp.QuestionRespVO;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -11,7 +12,7 @@ public interface QuestionStorageService {
 
     void deleteQuestionById (Long id);
 
-    QuestionRespVO updateQuestion(Long id, QuestionCreateReqVO questionCreateReqVO);
+    QuestionRespVO updateQuestion(Long id, QuestionUpdateReqVO questionUpdateReqVO);
 
     IPage<QuestionRespVO> getQuestionPage(QuestionQueryReqVO reqVO);
 

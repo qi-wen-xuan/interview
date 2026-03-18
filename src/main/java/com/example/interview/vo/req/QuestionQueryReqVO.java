@@ -1,5 +1,6 @@
 package com.example.interview.vo.req;
 
+import com.example.interview.enums.QuestionLevel;
 import lombok.Data;
 
 @Data
@@ -8,7 +9,7 @@ public class QuestionQueryReqVO {
 
     private Integer size = 20;
 
-    private String difficulty;
+    private QuestionLevel difficulty;
 
     private String category;
 

@@ -1,16 +1,15 @@
 package com.example.interview.Service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.interview.Service.QuestionStorageService;
 import com.example.interview.entity.Question;
-import com.example.interview.enums.QuestionLevel;
 import com.example.interview.mapper.QuestionStorageMapper;
 import com.example.interview.vo.req.QuestionCreateReqVO;
 import com.example.interview.vo.req.QuestionQueryReqVO;
+import com.example.interview.vo.req.QuestionUpdateReqVO;
 import com.example.interview.vo.resp.QuestionRespVO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -42,13 +41,13 @@ public class QuestionStorageServiceImpl extends ServiceImpl<QuestionStorageMappe
     }
 
     @Override
-    public QuestionRespVO updateQuestion(Long id, QuestionCreateReqVO questionCreateReqVO) {
+    public QuestionRespVO updateQuestion(Long id, QuestionUpdateReqVO questionUpdateReqVO) {
         Question question = questionStorageMapper.selectById(id);
         if (question == null) {
             throw new IllegalArgumentException("Question not found, id=" + id);
         }
-        if (questionCreateReqVO.getQuestion() != null) question.setQuestion(questionCreateReqVO.getQuestion());
-        if (questionCreateReqVO.getAnswer() != null) question.setAnswer(questionCreateReqVO.getAnswer());
+        if (questionUpdateReqVO.getQuestion() != null) question.setQuestion(questionUpdateReqVO.getQuestion());
+        if (questionUpdateReqVO.getAnswer() != null) question.setAnswer(questionUpdateReqVO.getAnswer());
 
         questionStorageMapper.updateById(question);
 
@@ -65,8 +64,8 @@ public class QuestionStorageServiceImpl extends ServiceImpl<QuestionStorageMappe
 
         LambdaQueryWrapper<Question> wrapper = new LambdaQueryWrapper<>();
 
-        if (reqVO.getDifficulty() != null && !reqVO.getDifficulty().trim().isEmpty()) {
-            wrapper.eq(Question::getDifficulty, reqVO.getDifficulty().trim());
+        if (reqVO.getDifficulty() != null) {
+            wrapper.eq(Question::getDifficulty, reqVO.getDifficulty());
         }
 
         if (reqVO.getCategory() != null && !reqVO.getCategory().trim().isEmpty()) {

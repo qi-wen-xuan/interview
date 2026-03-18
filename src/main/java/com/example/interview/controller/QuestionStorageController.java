@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.interview.Service.QuestionStorageService;
 import com.example.interview.vo.req.QuestionCreateReqVO;
 import com.example.interview.vo.req.QuestionQueryReqVO;
+import com.example.interview.vo.req.QuestionUpdateReqVO;
 import com.example.interview.vo.resp.QuestionRespVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class QuestionStorageController {
 
     @PutMapping("/{id}")
     public ResponseEntity<QuestionRespVO> updateQuestion(@PathVariable Long id,
-                                                 @Valid @RequestBody QuestionCreateReqVO req) {
+                                                         @Valid @RequestBody QuestionUpdateReqVO req) {
         QuestionRespVO resp = questionStorageService.updateQuestion(id, req);
         return ResponseEntity.ok(resp);
     }
