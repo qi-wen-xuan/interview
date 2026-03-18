@@ -1,0 +1,18 @@
+package com.example.interview.Service;
+
+import com.example.interview.vo.req.QuestionCreateReqVO;
+import com.example.interview.vo.req.QuestionQueryReqVO;
+import com.example.interview.vo.resp.QuestionRespVO;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+public interface QuestionStorageService {
+    QuestionRespVO createQuestion(QuestionCreateReqVO question);
+
+    void deleteQuestionById (Long id);
+
+    QuestionRespVO updateQuestion(Long id, QuestionCreateReqVO questionCreateReqVO);
+
+    IPage<QuestionRespVO> getQuestionPage(QuestionQueryReqVO reqVO);
+
+}
