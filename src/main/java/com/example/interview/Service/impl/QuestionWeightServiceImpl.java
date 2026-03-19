@@ -82,7 +82,6 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
     }
 
 
-
     @Override
     public WeightSettingRespVO addOrUpdateWeight(QuestionLevel difficulty, String category, Double weight) {
         Objects.requireNonNull(difficulty, "difficulty 不能为空");
