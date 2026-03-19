@@ -1,8 +1,8 @@
-package com.example.interview.Service.impl;
+package com.example.interview.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.interview.Service.QuestionWeightService;
+import com.example.interview.service.QuestionWeightService;
 import com.example.interview.entity.QuestionWeight;
 import com.example.interview.enums.QuestionLevel;
 import com.example.interview.mapper.QuestionWeightMapper;
@@ -12,12 +12,10 @@ import com.example.interview.vo.resp.WeightSettingRespVO;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,40 +70,41 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
     }
 
     @Override
-    public List<WeightSettingRespVO> listByDifficulty(String difficulty) {
+    public List<WeightSettingRespVO> listByDifficulty(QuestionLevel difficulty) {
         LambdaQueryWrapper<QuestionWeight> qw  = new LambdaQueryWrapper<>();
-        if (difficulty != null && !difficulty.isBlank()){
+        if (difficulty != null){
             qw.eq(QuestionWeight::getDifficulty,difficulty);
         }
         List<QuestionWeight> list = mapper.selectList(qw);
         return list.stream().map(this::toResp).collect(Collectors.toList());
     }
 
-
-
     @Override
     public List<WeightSettingRespVO> getWeightsByLevel(QuestionLevel difficulty) {
-        Objects.requireNonNull(difficulty, "difficulty 不能为空");
         LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
-        qw.eq(QuestionWeight::getDifficulty, difficulty);
+        if (difficulty != null) {
+            qw.eq(QuestionWeight::getDifficulty, difficulty);
+        }
         List<QuestionWeight> list = mapper.selectList(qw);
         return list.stream().map(this::toResp).collect(Collectors.toList());
     }
 
     @Override
     public boolean validateWeightSum(QuestionLevel difficulty) {
-        Objects.requireNonNull(difficulty, "difficulty 不能为空");
         LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
-        qw.eq(QuestionWeight::getDifficulty, difficulty);
+        if (difficulty != null){
+            qw.eq(QuestionWeight::getDifficulty, difficulty);
+        }
         double sum = mapper.selectList(qw).stream().mapToDouble(QuestionWeight::getWeight).sum();
         return Math.abs(sum - 100.0) < EPS;
     }
 
     @Override
     public Map<String, Double> getWeightMapForLevel(QuestionLevel difficulty) {
-        Objects.requireNonNull(difficulty, "difficulty 不能为空");
         LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
-        qw.eq(QuestionWeight::getDifficulty, difficulty);
+        if (difficulty != null) {
+            qw.eq(QuestionWeight::getDifficulty, difficulty);
+        }
         List<QuestionWeight> list = mapper.selectList(qw);
         Map<String, Double> map = new LinkedHashMap<>();
         for (QuestionWeight w : list) {

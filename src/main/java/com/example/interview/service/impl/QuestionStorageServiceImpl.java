@@ -1,10 +1,10 @@
-package com.example.interview.Service.impl;
+package com.example.interview.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.interview.Service.QuestionStorageService;
+import com.example.interview.service.QuestionStorageService;
 import com.example.interview.entity.Question;
 import com.example.interview.mapper.QuestionStorageMapper;
 import com.example.interview.vo.req.QuestionCreateReqVO;
@@ -68,7 +68,7 @@ public class QuestionStorageServiceImpl extends ServiceImpl<QuestionStorageMappe
             wrapper.eq(Question::getDifficulty, reqVO.getDifficulty());
         }
 
-        if (reqVO.getCategory() != null && !reqVO.getCategory().trim().isEmpty()) {
+        if (reqVO.getCategory() != null && !reqVO.getCategory().trim() .isEmpty()) {
             wrapper.eq(Question::getCategory, reqVO.getCategory().trim());
         }
 

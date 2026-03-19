@@ -1,7 +1,5 @@
-package com.example.interview.Service;
+package com.example.interview.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.example.interview.entity.QuestionWeight;
 import com.example.interview.enums.QuestionLevel;
 import com.example.interview.vo.req.*;
 import com.example.interview.vo.resp.WeightSettingRespVO;
@@ -16,7 +14,7 @@ public interface QuestionWeightService{
 
     void deleteById(Long id);
 
-    List<WeightSettingRespVO> listByDifficulty(String difficulty);
+    List<WeightSettingRespVO> listByDifficulty(QuestionLevel difficulty);
 
     List<WeightSettingRespVO> getWeightsByLevel(QuestionLevel difficulty);
 

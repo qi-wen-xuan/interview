@@ -1,7 +1,7 @@
 package com.example.interview.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.example.interview.Service.QuestionStorageService;
+import com.example.interview.service.QuestionStorageService;
 import com.example.interview.vo.req.QuestionCreateReqVO;
 import com.example.interview.vo.req.QuestionQueryReqVO;
 import com.example.interview.vo.req.QuestionUpdateReqVO;

@@ -1,4 +1,4 @@
-package com.example.interview.Service;
+package com.example.interview.service;
 
 import com.example.interview.vo.req.QuestionCreateReqVO;
 import com.example.interview.vo.req.QuestionQueryReqVO;

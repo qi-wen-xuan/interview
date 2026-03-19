@@ -1,10 +1,6 @@
-package com.example.interview.Service;
+package com.example.interview.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.interview.enums.QuestionLevel;
-import com.example.interview.vo.req.QuestionCreateReqVO;
-import com.example.interview.vo.req.QuestionQueryReqVO;
-import com.example.interview.vo.req.QuestionUpdateReqVO;
 import com.example.interview.vo.resp.QuestionRespVO;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.example.interview.controller;
 
-import com.example.interview.Service.QuestionWeightService;
+import com.example.interview.service.QuestionWeightService;
 import com.example.interview.enums.QuestionLevel;
 import com.example.interview.vo.req.WeightSettingCreateReqVO;
 import com.example.interview.vo.req.WeightSettingUpdateReqVO;
@@ -39,7 +39,7 @@ public class QuestionWeightController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WeightSettingRespVO>> list(@RequestParam(required = false) String difficulty) {
+    public ResponseEntity<List<WeightSettingRespVO>> list(@RequestParam(required = false) QuestionLevel difficulty) {
         return ResponseEntity.ok(service.listByDifficulty(difficulty));
     }
 
