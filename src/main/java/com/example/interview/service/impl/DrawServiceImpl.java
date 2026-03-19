@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class DrawServiceImpl implements DrawService {
 
-
     @Override
     public List<QuestionRespVO> draw(QuestionLevel level, int count, Integer allowDownLevels) {
         return List.of();
