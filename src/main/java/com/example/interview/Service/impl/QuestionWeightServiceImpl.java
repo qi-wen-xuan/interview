@@ -82,33 +82,7 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
     }
 
 
-    @Override
-    public WeightSettingRespVO addOrUpdateWeight(QuestionLevel difficulty, String category, Double weight) {
-        Objects.requireNonNull(difficulty, "difficulty 不能为空");
-        if (!StringUtils.hasText(category)) throw new IllegalArgumentException("category 不能为空");
-        if (weight == null || weight < 0.0) throw new IllegalArgumentException("weight 必须 >= 0");
 
-        LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
-        qw.eq(QuestionWeight::getDifficulty, difficulty)
-                .eq(QuestionWeight::getCategory, category);
-        QuestionWeight exist = mapper.selectOne(qw);
-        if (exist == null) {
-            QuestionWeight e = new QuestionWeight();
-            e.setDifficulty(difficulty);
-            e.setCategory(category);
-            e.setWeight(weight);
-            mapper.insert(e);
-            return toResp(e);
-        } else {
-            exist.setWeight(weight);
-            mapper.updateById(exist);
-            return toResp(exist);
-        }
-    }
-
-    /**
-     * 获取某职级的全部权重配置（按实体）
-     */
     @Override
     public List<WeightSettingRespVO> getWeightsByLevel(QuestionLevel difficulty) {
         Objects.requireNonNull(difficulty, "difficulty 不能为空");
@@ -118,9 +92,6 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
         return list.stream().map(this::toResp).collect(Collectors.toList());
     }
 
-    /**
-     * 校验某职级的权重总和是否等于 100（允许微小误差）
-     */
     @Override
     public boolean validateWeightSum(QuestionLevel difficulty) {
         Objects.requireNonNull(difficulty, "difficulty 不能为空");
@@ -130,9 +101,6 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
         return Math.abs(sum - 100.0) < EPS;
     }
 
-    /**
-     * 返回某职级的原始映射 category -> weight（raw）
-     */
     @Override
     public Map<String, Double> getWeightMapForLevel(QuestionLevel difficulty) {
         Objects.requireNonNull(difficulty, "difficulty 不能为空");

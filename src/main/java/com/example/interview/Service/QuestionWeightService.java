@@ -18,8 +18,6 @@ public interface QuestionWeightService{
 
     List<WeightSettingRespVO> listByDifficulty(String difficulty);
 
-    WeightSettingRespVO addOrUpdateWeight(QuestionLevel difficulty, String category, Double weight);
-
     List<WeightSettingRespVO> getWeightsByLevel(QuestionLevel difficulty);
 
     boolean validateWeightSum(QuestionLevel difficulty);
