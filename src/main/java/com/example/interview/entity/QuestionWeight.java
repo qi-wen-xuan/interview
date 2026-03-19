@@ -33,4 +33,6 @@ public class QuestionWeight {
         this.weight = weight;
     }
 
+    public QuestionWeight() {
+    }
 }

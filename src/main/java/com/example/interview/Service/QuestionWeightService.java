@@ -18,14 +18,11 @@ public interface QuestionWeightService{
 
     List<WeightSettingRespVO> listByDifficulty(String difficulty);
 
-//    void initDefaultWeights();
-//
-//
-//    void validateWeightSum(QuestionLevel level);
-//
-//
-//    List<Map<String, Object>> getCategoryRate(QuestionLevel level);
-//
-//
-//    boolean saveWithValidate(QuestionWeight weight);
+    WeightSettingRespVO addOrUpdateWeight(QuestionLevel difficulty, String category, Double weight);
+
+    List<WeightSettingRespVO> getWeightsByLevel(QuestionLevel difficulty);
+
+    boolean validateWeightSum(QuestionLevel difficulty);
+
+    Map<String, Double> getWeightMapForLevel(QuestionLevel difficulty);
 }

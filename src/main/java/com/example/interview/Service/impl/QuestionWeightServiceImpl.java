@@ -12,9 +12,12 @@ import com.example.interview.vo.resp.WeightSettingRespVO;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper, QuestionWeight> implements QuestionWeightService {
 
     private final QuestionWeightMapper mapper;
+    private static final double EPS = 1e-6;
 
     @Override
     public WeightSettingRespVO createWeight(WeightSettingCreateReqVO req) {
@@ -77,51 +81,70 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
         return list.stream().map(this::toResp).collect(Collectors.toList());
     }
 
-    @Override
-    public void initDefaultWeights() {
-        // X1/A5职级初始化
-        saveOrUpdate(new QuestionWeight(QuestionLevel.X1, "core java", 60.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.X1, "database", 40.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.A5, "core java", 60.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.A5, "database", 40.0));
 
-        // B1/B2职级初始化
-        saveOrUpdate(new QuestionWeight(QuestionLevel.B1, "core java", 35.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.B1, "database", 30.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.B1, "spring boot", 35.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.B2, "core java", 35.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.B2, "database", 30.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.B2, "spring boot", 35.0));
-
-        // C1/C2职级初始化
-        saveOrUpdate(new QuestionWeight(QuestionLevel.C1, "java concurrent", 25.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.C1, "java jvm", 25.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.C1, "spring boot", 25.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.C1, "redis", 25.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.C2, "java concurrent", 25.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.C2, "java jvm", 25.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.C2, "spring boot", 25.0));
-        saveOrUpdate(new QuestionWeight(QuestionLevel.C2, "redis", 25.0));
-    }
 
     @Override
-    public void validateWeightSum(QuestionLevel level) {
+    public WeightSettingRespVO addOrUpdateWeight(QuestionLevel difficulty, String category, Double weight) {
+        Objects.requireNonNull(difficulty, "difficulty 不能为空");
+        if (!StringUtils.hasText(category)) throw new IllegalArgumentException("category 不能为空");
+        if (weight == null || weight < 0.0) throw new IllegalArgumentException("weight 必须 >= 0");
+
         LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
-        qw.eq(QuestionWeight::getDifficulty, level);
-        double total = list(qw).stream()
-                .mapToDouble(QuestionWeight::getWeight).sum();
-        if (total > 100.0) {
-            throw new IllegalArgumentException(level + "职级总权重超过100%");
+        qw.eq(QuestionWeight::getDifficulty, difficulty)
+                .eq(QuestionWeight::getCategory, category);
+        QuestionWeight exist = mapper.selectOne(qw);
+        if (exist == null) {
+            QuestionWeight e = new QuestionWeight();
+            e.setDifficulty(difficulty);
+            e.setCategory(category);
+            e.setWeight(weight);
+            mapper.insert(e);
+            return toResp(e);
+        } else {
+            exist.setWeight(weight);
+            mapper.updateById(exist);
+            return toResp(exist);
         }
     }
 
+    /**
+     * 获取某职级的全部权重配置（按实体）
+     */
     @Override
-    public List<Map<String, Object>> getCategoryRate(QuestionLevel level) {
-        return list(new LambdaQueryWrapper<QuestionWeight>()
-                .eq(QuestionWeight::getDifficulty, level))
-                .stream()
-                .map(item -> Map.of("category", item.getCategory(), "rate", item.getWeight() / 100))
-                .collect(Collectors.toList());
+    public List<WeightSettingRespVO> getWeightsByLevel(QuestionLevel difficulty) {
+        Objects.requireNonNull(difficulty, "difficulty 不能为空");
+        LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
+        qw.eq(QuestionWeight::getDifficulty, difficulty);
+        List<QuestionWeight> list = mapper.selectList(qw);
+        return list.stream().map(this::toResp).collect(Collectors.toList());
+    }
+
+    /**
+     * 校验某职级的权重总和是否等于 100（允许微小误差）
+     */
+    @Override
+    public boolean validateWeightSum(QuestionLevel difficulty) {
+        Objects.requireNonNull(difficulty, "difficulty 不能为空");
+        LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
+        qw.eq(QuestionWeight::getDifficulty, difficulty);
+        double sum = mapper.selectList(qw).stream().mapToDouble(QuestionWeight::getWeight).sum();
+        return Math.abs(sum - 100.0) < EPS;
+    }
+
+    /**
+     * 返回某职级的原始映射 category -> weight（raw）
+     */
+    @Override
+    public Map<String, Double> getWeightMapForLevel(QuestionLevel difficulty) {
+        Objects.requireNonNull(difficulty, "difficulty 不能为空");
+        LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
+        qw.eq(QuestionWeight::getDifficulty, difficulty);
+        List<QuestionWeight> list = mapper.selectList(qw);
+        Map<String, Double> map = new LinkedHashMap<>();
+        for (QuestionWeight w : list) {
+            map.put(w.getCategory(), w.getWeight());
+        }
+        return map;
     }
 
 
