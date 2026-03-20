@@ -44,7 +44,7 @@ public class QuestionStorageServiceImpl extends ServiceImpl<QuestionStorageMappe
     public QuestionRespVO updateQuestion(Long id, QuestionUpdateReqVO questionUpdateReqVO) {
         Question question = questionStorageMapper.selectById(id);
         if (question == null) {
-            throw new IllegalArgumentException("Question not found, id=" + id);
+            throw new IllegalArgumentException("没发现该问题, id=" + id);
         }
         if (questionUpdateReqVO.getQuestion() != null) question.setQuestion(questionUpdateReqVO.getQuestion());
         if (questionUpdateReqVO.getAnswer() != null) question.setAnswer(questionUpdateReqVO.getAnswer());
@@ -75,6 +75,7 @@ public class QuestionStorageServiceImpl extends ServiceImpl<QuestionStorageMappe
         if (reqVO.getQuestion() != null && !reqVO.getQuestion().trim().isEmpty()) {
             wrapper.like(Question::getQuestion, reqVO.getQuestion().trim());
         }
+        wrapper.orderByDesc(Question::getCreatedAt);
 
         IPage<Question> result = questionStorageMapper.selectPage(pager, wrapper);
 

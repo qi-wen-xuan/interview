@@ -43,13 +43,6 @@ public class QuestionWeightController {
         return ResponseEntity.ok(service.listByDifficulty(difficulty));
     }
 
-
-    @GetMapping("/level/{difficulty}")
-    public ResponseEntity<List<WeightSettingRespVO>> getWeightsByLevel(@PathVariable("difficulty") QuestionLevel difficulty) {
-        List<WeightSettingRespVO> list = service.getWeightsByLevel(difficulty);
-        return ResponseEntity.ok(list);
-    }
-
     @GetMapping("/level/{difficulty}/validate")
     public ResponseEntity<Map<String, Object>> validateWeightSum(@PathVariable("difficulty") QuestionLevel difficulty) {
         boolean ok = service.validateWeightSum(difficulty);

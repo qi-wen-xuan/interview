@@ -1,7 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.11'
-    id 'io.spring.dependency-management' version '1.1.7'
+    // 使用一个真实存在且稳定的 Spring Boot 版本（示例：3.1.5）
+    id 'org.springframework.boot' version '3.1.5'
+    id 'io.spring.dependency-management' version '1.1.0' // 1.1.7 可能不存在，1.1.0 常用
 }
 
 group = 'com.example'
@@ -22,28 +23,32 @@ configurations {
 
 repositories {
     mavenCentral()
+    // 如果公司有内网仓库（Nexus/Artifactory），在这里添加：
+    // maven { url "https://your.company.repo/repository/maven-public/" }
+    // mavenLocal() // 可选：从本地 Maven 仓库读取依赖
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // MyBatis-Plus starter（保留你需要的版本）
+    implementation "com.baomidou:mybatis-plus-boot-starter:3.5.11"
+
+    // MySQL 驱动
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Lombok（编译时注解处理）
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    // MyBatis-Plus starter（保留）
-    implementation "com.baomidou:mybatis-plus-boot-starter:3.5.4"
 
-// 为 IDEA / 编译生成 Spring Boot 配置元数据（可选，但推荐）
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    // 开发时热重载
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    // 测试相关
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-//    implementation "com.baomidou:mybatis-plus-boot-starter:3.5.4"
 }
 
 tasks.named('test') {

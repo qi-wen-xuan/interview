@@ -42,7 +42,7 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
 
         try {
             mapper.insert(entity);
-        } catch (DuplicateKeyException ex) {
+        } catch (DuplicateKeyException ex) { //插入操作违反了数据库的唯一性约束
             throw new IllegalStateException("权重已经存在");
         }
         return toResp(entity);
@@ -79,15 +79,8 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
         return list.stream().map(this::toResp).collect(Collectors.toList());
     }
 
-    @Override
-    public List<WeightSettingRespVO> getWeightsByLevel(QuestionLevel difficulty) {
-        LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
-        if (difficulty != null) {
-            qw.eq(QuestionWeight::getDifficulty, difficulty);
-        }
-        List<QuestionWeight> list = mapper.selectList(qw);
-        return list.stream().map(this::toResp).collect(Collectors.toList());
-    }
+
+
 
     @Override
     public boolean validateWeightSum(QuestionLevel difficulty) {

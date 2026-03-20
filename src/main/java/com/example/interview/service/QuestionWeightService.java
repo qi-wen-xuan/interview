@@ -16,8 +16,6 @@ public interface QuestionWeightService{
 
     List<WeightSettingRespVO> listByDifficulty(QuestionLevel difficulty);
 
-    List<WeightSettingRespVO> getWeightsByLevel(QuestionLevel difficulty);
-
     boolean validateWeightSum(QuestionLevel difficulty);
 
     Map<String, Double> getWeightMapForLevel(QuestionLevel difficulty);

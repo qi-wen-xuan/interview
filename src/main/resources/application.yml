@@ -1,16 +1,26 @@
 spring:
+  application:
+    name: interview
+
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/question?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false
     username: root
     password: 040728
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  sql:
+    init:
+      enabled: false
+
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
   global-config:
     db-config:
-      id-type: auto          # 主键类型 AUTO/ASSIGN_ID 等
+      id-type: auto
       field-strategy: NOT_EMPTY
-  mapper-locations: classpath:mapper//.xml   # 如使用 xml 映射文件
-  type-aliases-package: com.example.yourpackage.entity
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.example.interview.entity
+
+app:
+  max-downgrade-levels: 2
