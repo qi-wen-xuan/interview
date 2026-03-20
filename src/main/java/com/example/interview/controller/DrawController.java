@@ -3,7 +3,6 @@ package com.example.interview.controller;
 import com.example.interview.service.DrawService;
 import com.example.interview.enums.QuestionLevel;
 import com.example.interview.vo.resp.QuestionRespVO;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
