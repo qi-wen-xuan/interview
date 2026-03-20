@@ -22,7 +22,7 @@ public class DrawController {
     @PostMapping
     public ResponseEntity<List<QuestionRespVO>> draw(
             @RequestParam QuestionLevel level,
-            @RequestParam @Min(1) int count,
+            @RequestParam int count,
             @RequestParam(required = false) Integer allowDowngradeLevels) {
         List<QuestionRespVO> list = drawService.draw(level, count, allowDowngradeLevels);
         return ResponseEntity.ok(list);
