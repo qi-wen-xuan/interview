@@ -23,9 +23,7 @@ configurations {
 
 repositories {
     mavenCentral()
-    // 如果公司有内网仓库（Nexus/Artifactory），在这里添加：
-    // maven { url "https://your.company.repo/repository/maven-public/" }
-    // mavenLocal() // 可选：从本地 Maven 仓库读取依赖
+
 }
 
 dependencies {
@@ -33,7 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // MyBatis-Plus starter（保留你需要的版本）
+    // MyBatis-Plus starter
     implementation "com.baomidou:mybatis-plus-boot-starter:3.5.11"
 
     // MySQL 驱动
@@ -47,8 +45,12 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // 测试相关
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // 包含 Mockito/JUnit等
+    testRuntimeOnly 'com.h2database:h2:2.1.214'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
 }
 
 tasks.named('test') {

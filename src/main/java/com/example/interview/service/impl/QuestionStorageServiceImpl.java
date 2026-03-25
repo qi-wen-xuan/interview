@@ -31,7 +31,7 @@ public class QuestionStorageServiceImpl extends ServiceImpl<QuestionStorageMappe
         BeanUtils.copyProperties(question, questionEntity);
         questionStorageMapper.insert(questionEntity);
         QuestionRespVO resp = new QuestionRespVO();
-        BeanUtils.copyProperties(question, resp);
+        BeanUtils.copyProperties(questionEntity, resp);
         return resp;
     }
 

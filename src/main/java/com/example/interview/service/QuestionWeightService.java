@@ -1,6 +1,6 @@
 package com.example.interview.service;
 
-import com.example.interview.enums.QuestionLevel;
+import com.example.interview.enums.Level;
 import com.example.interview.vo.req.*;
 import com.example.interview.vo.resp.WeightSettingRespVO;
 
@@ -14,9 +14,9 @@ public interface QuestionWeightService{
 
     void deleteById(Long id);
 
-    List<WeightSettingRespVO> listByDifficulty(QuestionLevel difficulty);
+    List<WeightSettingRespVO> listByDifficulty(Level difficulty);
 
-    boolean validateWeightSum(QuestionLevel difficulty);
+    boolean validateWeightSum(Level difficulty);
 
-    Map<String, Double> getWeightMapForLevel(QuestionLevel difficulty);
+    Map<String, Double> getWeightMapForLevel(Level difficulty);
 }

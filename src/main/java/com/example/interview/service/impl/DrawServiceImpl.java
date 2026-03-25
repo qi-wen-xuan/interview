@@ -2,7 +2,7 @@ package com.example.interview.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.interview.entity.Question;
-import com.example.interview.enums.QuestionLevel;
+import com.example.interview.enums.Level;
 import com.example.interview.service.DrawService;
 import com.example.interview.service.QuestionWeightService;
 import com.example.interview.mapper.QuestionStorageMapper;
@@ -22,14 +22,21 @@ public class DrawServiceImpl implements DrawService {
     private final QuestionWeightService weightService;
     @Value("${app.max-downgrade-levels:2}")
     private int defaultAllowGrade;
-
+    /**
+     * 抽取面试题
+     *
+     * @param level 职级
+     * @param count 抽取数量
+     * @param allowLevels 允许降级的级别数，可为null使用默认值
+     * @return 抽取的题目列表
+     */
     @Override
     @Transactional(readOnly = true)
-    public List<QuestionRespVO> draw(QuestionLevel level, int count, Integer allowLevels) {
+    public List<QuestionRespVO> draw(Level level, int count, Integer allowLevels) {
         if (level == null || count <= 0) return Collections.emptyList();
 
         int allowDown = (allowLevels == null) ? defaultAllowGrade : allowLevels;
-        QuestionLevel[] all = QuestionLevel.values();
+        Level[] all = Level.values();
         int idx = level.ordinal();  //从0开始 顺序
         int lowest = Math.max(0, idx - allowDown);
         List<String> allowed = new ArrayList<>();
@@ -41,7 +48,7 @@ public class DrawServiceImpl implements DrawService {
         Map<String, Double> ratio = new LinkedHashMap<>();
         if (raw == null || raw.isEmpty()) {
             List<Question> exist = selectByDifficulties(allowed);
-            Set<String> cats = exist.stream().map(Question::getCategory).filter(Objects::nonNull).collect(Collectors.toSet());
+            Set<String> cats = exist.stream().map(Question::getCategory).filter(Objects::nonNull).collect(Collectors.toSet());  //去重
             if (cats.isEmpty()) return Collections.emptyList();
             double r = 1.0 / cats.size();
             for (String c : cats){
@@ -54,9 +61,11 @@ public class DrawServiceImpl implements DrawService {
                 Set<String> cats = exist.stream().map(Question::getCategory).filter(Objects::nonNull).collect(Collectors.toSet());
                 if (cats.isEmpty()) return Collections.emptyList();
                 double r = 1.0 / cats.size();
-                for (String c : cats) ratio.put(c, r);
-            } else {  //Set<Map.Entry<String, Double>>   返回这个 map 的“键值对集合”（Set<Map.Entry<String, Double>>）。每个 Map.Entry 包含一个 key 和对应的value
-                for (var e : raw.entrySet()){
+                for (String c : cats) {
+                    ratio.put(c, r);
+                }
+            } else {  //Set<Map.Entry<String, Double>>
+                for (var e : raw.entrySet()){   //在一次遍历过程中直接读取 key 和 value
                     ratio.put(e.getKey(), e.getValue() / sum); //category   weight  计算出比例
                 }
             }
@@ -65,7 +74,7 @@ public class DrawServiceImpl implements DrawService {
 
         Map<String, Integer> target = new LinkedHashMap<>();  //每类的目标数量
         int assigned = 0;
-        List<String> cats = new ArrayList<>(ratio.keySet()); //ratio.keySet() 返回一个 Set<String>，包含 map 中所有的键（类别名称）
+        List<String> cats = new ArrayList<>(ratio.keySet()); //返回 Map ratio 中所有键（key）的集合 Set<String>，包含 map 中所有的键（类别名称）
         for (String c : cats) {
             int t = (int) Math.round(ratio.get(c) * count);  //该类别比例应分配的理论题数
             target.put(c, t);

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.interview.service.QuestionWeightService;
 import com.example.interview.entity.QuestionWeight;
-import com.example.interview.enums.QuestionLevel;
+import com.example.interview.enums.Level;
 import com.example.interview.mapper.QuestionWeightMapper;
 import com.example.interview.vo.req.WeightSettingCreateReqVO;
 import com.example.interview.vo.req.WeightSettingUpdateReqVO;
@@ -70,7 +70,7 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
     }
 
     @Override
-    public List<WeightSettingRespVO> listByDifficulty(QuestionLevel difficulty) {
+    public List<WeightSettingRespVO> listByDifficulty(Level difficulty) {
         LambdaQueryWrapper<QuestionWeight> qw  = new LambdaQueryWrapper<>();
         if (difficulty != null){
             qw.eq(QuestionWeight::getDifficulty,difficulty);
@@ -80,10 +80,8 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
     }
 
 
-
-
     @Override
-    public boolean validateWeightSum(QuestionLevel difficulty) {
+    public boolean validateWeightSum(Level difficulty) {
         LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
         if (difficulty != null){
             qw.eq(QuestionWeight::getDifficulty, difficulty);
@@ -93,7 +91,7 @@ public class QuestionWeightServiceImpl  extends ServiceImpl<QuestionWeightMapper
     }
 
     @Override
-    public Map<String, Double> getWeightMapForLevel(QuestionLevel difficulty) {
+    public Map<String, Double> getWeightMapForLevel(Level difficulty) {
         LambdaQueryWrapper<QuestionWeight> qw = new LambdaQueryWrapper<>();
         if (difficulty != null) {
             qw.eq(QuestionWeight::getDifficulty, difficulty);

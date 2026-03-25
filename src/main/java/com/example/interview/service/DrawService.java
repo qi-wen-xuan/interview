@@ -1,6 +1,6 @@
 package com.example.interview.service;
 
-import com.example.interview.enums.QuestionLevel;
+import com.example.interview.enums.Level;
 import com.example.interview.vo.resp.QuestionRespVO;
 
 import java.util.List;
@@ -13,6 +13,6 @@ public interface DrawService {
      * @param allowDownLevels 最多可以向下降多少级（null 则使用配置）
      * @return 列表，大小最多为 count（当题库不足时可能小于 count）
      */
-    List<QuestionRespVO> draw(QuestionLevel level, int count, Integer allowDownLevels);
+    List<QuestionRespVO> draw(Level level, int count, Integer allowDownLevels);
 
 }
