@@ -1,14 +1,15 @@
 package com.example.interview.controller;
 
 import com.example.interview.service.DrawService;
-import com.example.interview.enums.Level;
+import com.example.interview.enums.QuestionLevel;
 import com.example.interview.vo.resp.QuestionRespVO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,8 +20,7 @@ import java.util.List;
 public class DrawController {
     private final DrawService drawService;
 
-    @Operation(summary = "抽取题目", description = "根据级别(level)和数量(count)抽取题目，可选允许降级的等级数")
-    @GetMapping
+    @PostMapping
     public ResponseEntity<List<QuestionRespVO>> draw(
             @Parameter(description = "级别", required = true)
             @RequestParam Level level,
